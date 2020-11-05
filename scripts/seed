@@ -1,0 +1,23 @@
+#!/bin/bash
+set -e
+cd $(dirname $0)/..
+
+jq --version > /dev/null 2>&1 || (echo "ERROR: jq is not installed. on debian based systems intall it with 'sudo apt-get install jq'" && exit 1)
+curl --version > /dev/null 2>&1 || (echo "ERROR: curl is not installed. on debian based systems intall it with 'sudo apt-get install curl'" && exit 1)
+
+docker-compose up -d synapse nginx
+sleep 10s
+
+# add admin user
+docker-compose exec synapse register_new_matrix_user -c /data/homeserver.yaml http://nginx -u admin -p topsecret --admin || true
+
+# add dimension user
+docker-compose exec synapse register_new_matrix_user -c /data/homeserver.yaml http://nginx -u dimension -p topsecret --no-admin || true
+ACCESS_TOKEN=$(curl -s -XPOST -d '{"type":"m.login.password", "user":"dimension", "password":"topsecret"}' "http://localhost/_matrix/client/r0/login"| jq  -r .access_token)
+
+cat > components/dimension/config/development.yaml <<EOL
+homeserver:
+  accessToken: $ACCESS_TOKEN
+EOL
+
+docker-compose restart dimension || true

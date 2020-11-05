@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+
+cd $(dirname $0)/..
+mkdir -p src
+cd src
+
+git clone https://github.com/matrix-org/matrix-js-sdk.git
+git clone https://github.com/matrix-org/matrix-react-sdk.git
+git clone https://github.com/vector-im/element-web.git
+git clone https://github.com/turt2live/matrix-dimension.git
