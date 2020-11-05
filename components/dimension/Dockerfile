@@ -6,7 +6,7 @@ RUN mkdir /.config /.npmcache && \
     chmod 777 /.config /.npmcache && \
     npm config set cache /.npmcache --global
 
-RUN npm install -g ts-node nodemon concurrently && \
+RUN npm install -g ts-node tsc-watch concurrently && \
     npm install -g --unsafe-perm sqlite3
 
 # pre download npm dependencies into cache

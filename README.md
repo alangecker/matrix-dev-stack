@@ -21,7 +21,9 @@ _* watches and automatically reloads/restarts on file changes_
 
 ## how to use
 ```bash
+# get matrix-dev-stack
 git clone https://github.com/alangecker/matrix-dev-stack.git
+cd matrix-dev-stack
 
 # get sources of the components
 ./scripts/clone-repos
@@ -40,3 +42,5 @@ you can now access...
 - Element via http://localhost/
 - Synapse via http://localhost/_matrix/
 - Dimension via http://localhost:8082
+
+an admin user `admin:topsecret` does already exist.

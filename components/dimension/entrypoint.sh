@@ -1,16 +1,14 @@
 #!/bin/bash
 set -e
-cd /project/src/matrix-dimension
+cd /matrix-dimension
 
 npm config set cache /.npmcache --global
 
 npm install
-npm install --no-save --no-package-lock sqlite3
+npm install --no-save --no-package-lock sqlite3 tsc-watch
 
 export NODE_CONFIG_DIR=/config
-concurrently -n 'backend,backend-tsc,web' \
-    "nodemon --watch build/app/ --watch /config/ --ext 'js,yaml' build/app/index.js" \
-    "./node_modules/.bin/tsc --watch --preserveWatchOutput -p tsconfig-app.json" \
-    "npm run start:web"
-    
 
+concurrently -n 'backend,web' \
+    "./node_modules/.bin/tsc-watch -p tsconfig-app.json --preserveWatchOutput --onSuccess 'node ./build/app/index.js'" \
+    "npm run start:web"
